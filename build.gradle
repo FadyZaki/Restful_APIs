@@ -1,0 +1,86 @@
+// ----------------------------------------------------------------------------
+// Gradle build file for CS5031 Assignment3 in the Academic Year 2015/16 
+// Author: Alexander Voss <alex.voss@st-andrews.ac.uk>
+//
+// You should not need to modify this file. If you do find something that is
+// not working please feel free to fix this or just let me know and I will try
+// to find a solution.
+// ----------------------------------------------------------------------------
+
+plugins {
+  id 'net.saliman.cobertura' version '2.2.7'
+  id 'java'
+  id 'eclipse'
+  id 'groovy'
+  id 'checkstyle'
+}
+
+def javaVersion = System.getProperty("java.specification.version") as BigDecimal
+
+// Instructs the compileJava task to accept code that is compatible with
+// version 1.8 and to produce byte-code compatible with this version as well.
+compileJava {
+    // let's use the latest Java version since we have no requiremement to
+    // stay compatible with older ones
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+// Defines the repositories used for dependency resolution.
+repositories {
+   mavenCentral()
+}
+
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'CS5031 2015 Assignment3',
+                   'Implementation-Version': version
+    }
+}
+
+ext.jerseyVersion = '2.21'
+
+// adaptation needed for Java 8's JavaDoc as it is too picky by default:
+// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+if (javaVersion >= 1.8) {
+  tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+  }
+}
+
+// enable links to the JavaSE JavaDoc
+javadoc {
+  options.links 'https://docs.oracle.com/javase/8/docs/api/'
+}
+
+checkstyle {
+  toolVersion = "6.11.2"
+  configFile = new File(rootDir, "config/checkstyle/checkstyle.xml")
+}
+
+// Checkstyle HTML output; source:
+// http://stackoverflow.com/questions/20361942/generate-checkstyle-html-report-with-gradle
+task checkstyleHtml << {
+  println "Formatting checkstyle report"
+  ant.xslt(in: checkstyleMain.reports.xml.destination,
+           style: new File(rootDir, '/config/checkstyle/checkstyle-noframes-sorted.xsl'),
+           out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
+}
+checkstyleMain.finalizedBy checkstyleHtml
+
+
+
+// Declares the dependencies for compling the implementation code - and for compiling the tests
+dependencies {
+  compile 'org.glassfish.jersey.core:jersey-server:'+jerseyVersion
+  compile 'org.glassfish.jersey.core:jersey-client:'+jerseyVersion
+  compile 'org.glassfish.jersey.core:jersey-common:'+jerseyVersion
+  compile 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:'+jerseyVersion
+  compile 'org.glassfish.jersey.connectors:jersey-grizzly-connector:'+jerseyVersion
+  compile 'com.google.code.gson:gson:2.4'
+  compile 'org.pegdown:pegdown:1.6.0'
+  compile 'com.h2database:h2:1.4.190'
+  testCompile 'org.codehaus.groovy:groovy-all:2.3.10'
+  testCompile 'org.spockframework:spock-core:1.0-groovy-2.3'
+}
