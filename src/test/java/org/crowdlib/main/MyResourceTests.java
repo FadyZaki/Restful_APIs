@@ -62,7 +62,7 @@ public class MyResourceTests {
 
   private abstract class MockSecurityContext implements SecurityContext {
 
-    protected boolean called = false;;
+    protected boolean called = false;
 
     @Override
     public boolean isUserInRole(String role) {

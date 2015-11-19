@@ -78,6 +78,7 @@ dependencies {
   compile 'org.glassfish.jersey.core:jersey-common:'+jerseyVersion
   compile 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:'+jerseyVersion
   compile 'org.glassfish.jersey.connectors:jersey-grizzly-connector:'+jerseyVersion
+  compile 'org.glassfish.jersey.media:jersey-media-json-jackson:'+jerseyVersion
   compile 'com.google.code.gson:gson:2.4'
   compile 'org.pegdown:pegdown:1.6.0'
   compile 'com.h2database:h2:1.4.190'

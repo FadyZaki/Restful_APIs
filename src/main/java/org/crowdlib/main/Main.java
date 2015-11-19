@@ -28,8 +28,8 @@ public final class Main {
     protected static HttpServer createServer() throws IOException {
         final ResourceConfig rc = new ResourceConfig();
         rc.packages("org.crowdlib.main");
-        //rc.register(MyResource.class);
-        //rc.register(AuthFilter.class);
+        rc.register(MyResource.class);
+        rc.register(AuthFilter.class);
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
     }
 
