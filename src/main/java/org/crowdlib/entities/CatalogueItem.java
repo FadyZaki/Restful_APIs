@@ -22,20 +22,23 @@ public class CatalogueItem {
 	
 	private List<User> followers;
 	
-	private List<Link> linksToComments;
+	private Link linkToAllComments;
+
+	private List<Link> linksToEachComment;
 	
 	public CatalogueItem(){
 		
 	}
 
-	public CatalogueItem(Integer id, String title, String author) {
+	public CatalogueItem(Integer id, String title, String author, Link linkToAllComments) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.comments = new ArrayList<Comment>();
 		this.followers = new ArrayList<User>();
-		this.linksToComments = new ArrayList<Link>();
+		this.linkToAllComments = linkToAllComments;
+		this.linksToEachComment = new ArrayList<Link>();
 	}
 
 	public Integer getId() {
@@ -71,15 +74,23 @@ public class CatalogueItem {
 		this.comments = comments;
 	}
 	
-    @XmlElement(name = "linksToComments")
+    @XmlElement(name = "linksToEachComment")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class) 
-    public List<Link> getLinksToComments() {
-        return linksToComments;
+    public List<Link> getLinksToEachComment() {
+        return linksToEachComment;
     }
     
-    public void setLinksToComments(List<Link> links) {
-        this.linksToComments = links;
+    public void setLinksToEachComment(List<Link> links) {
+        this.linksToEachComment = links;
     }
+    
+	public Link getLinkToAllComments() {
+		return linkToAllComments;
+	}
+
+	public void setLinkToAllComments(Link linkToAllComments) {
+		this.linkToAllComments = linkToAllComments;
+	}
 
     @XmlTransient
 	public List<User> getFollowers() {
