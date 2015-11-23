@@ -36,10 +36,16 @@ public class User {
 	private List<Notification> notifications;
 
 	public User() {
+		this.favouriteComments = new ArrayList<Comment>();
+		this.followedItems = new ArrayList<CatalogueItem>();
+		this.notifications = new ArrayList<Notification>();
 	}
-
-	public User(Integer id) {
-		this.id = id;
+	
+	public User(String username) {
+		this.username = username;
+		this.favouriteComments = new ArrayList<Comment>();
+		this.followedItems = new ArrayList<CatalogueItem>();
+		this.notifications = new ArrayList<Notification>();
 	}
 
 	public User(Integer id, String title, String name, String surname, String role, String username, String password) {

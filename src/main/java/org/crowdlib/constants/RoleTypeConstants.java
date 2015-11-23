@@ -1,4 +1,4 @@
-package org.crowdlib.entities;
+package org.crowdlib.constants;
 
 public class RoleTypeConstants {
 	

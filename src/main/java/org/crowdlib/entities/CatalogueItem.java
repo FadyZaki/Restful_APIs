@@ -27,7 +27,9 @@ public class CatalogueItem {
 	private List<Link> linksToEachComment;
 	
 	public CatalogueItem(){
-		
+		this.comments = new ArrayList<Comment>();
+		this.followers = new ArrayList<User>();
+		this.linksToEachComment = new ArrayList<Link>();
 	}
 
 	public CatalogueItem(Integer id, String title, String author, Link linkToAllComments) {

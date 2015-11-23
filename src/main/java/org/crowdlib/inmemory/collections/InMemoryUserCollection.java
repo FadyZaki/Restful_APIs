@@ -2,7 +2,7 @@ package org.crowdlib.inmemory.collections;
 
 import java.util.HashMap;
 
-import org.crowdlib.entities.RoleTypeConstants;
+import org.crowdlib.constants.RoleTypeConstants;
 import org.crowdlib.entities.User;
 
 public class InMemoryUserCollection {

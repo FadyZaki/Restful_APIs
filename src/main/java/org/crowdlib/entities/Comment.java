@@ -33,7 +33,7 @@ public class Comment {
 
 	private int favouritesCount;
 	
-	private static int numberOfComments=0;
+	public static int numberOfComments=0;
 
 	public Comment(String content, User owner, CatalogueItem catalogueItem) {
 		super();
