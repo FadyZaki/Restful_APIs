@@ -70,6 +70,13 @@ public class CommentResource {
 		this.uriInfo = uriInfo;
 	}
 
+	/**
+	 * Retrives a list of the comments on this catalogue item
+	 * @param itemId id of the item to be retrieved
+	 * @param start Start index of the subset of items to be retrieved
+	 * @param size Size of the subset of items to be retrieved
+	 * @return A response containing all the comments on this item
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCatalogueItemComments(@PathParam("itemId") Integer itemId, @QueryParam("start") Integer start,
@@ -96,7 +103,14 @@ public class CommentResource {
 		}
 
 	}
-
+ 
+	/**
+	 * A method that handles the start index for pagination purposes
+	 * @param start Start index of the subset of list to be retrieved
+	 * @param size Size of the subset of list to be retrieved
+	 * @param currentCatalogueItem 
+	 * @return an integer describing the next start index for pagination
+	 */
 	private int adjustStartIndexForPagination(Integer start, Integer size, CatalogueItem currentCatalogueItem) {
 		int numberOfRemainingComments = catalogueItemDao.getNumberOfRemainingComments(currentCatalogueItem,
 				start + size);
@@ -109,6 +123,11 @@ public class CommentResource {
 		return newStart;
 	}
 
+	/**
+	 * Retrieve the comment specified by this id
+	 * @param commentId 
+	 * @return The comment specified by this id
+	 */
 	@Path("/{commentId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -125,6 +144,12 @@ public class CommentResource {
 
 	}
 
+	/**
+	 * Adds a comment to a catalogue item
+	 * @param itemId The specified item id
+	 * @param commentContent The content of the comment to be added
+	 * @return The added comment
+	 */ 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -151,6 +176,12 @@ public class CommentResource {
 
 	}
 
+	/**
+	 * Adds a reply to a comment
+	 * @param commentId 
+	 * @param replyContent Content of the reply
+	 * @return The added reply
+	 */
 	@Path("/{commentId}")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -174,6 +205,11 @@ public class CommentResource {
 		
 	}
 
+	/**
+	 * Retrieves all the replies for the comment specified
+	 * @param commentId Id of comment specified
+	 * @return List of replies for this comment
+	 */
 	@Path("/{commentId}/replies")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -187,6 +223,11 @@ public class CommentResource {
 		}
 	}
 
+	/**
+	 * Deletes a comment specified by this id
+	 * @param commentId
+	 * @return The deleted comment after content being changed
+	 */
 	@Path("/{commentId}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -207,11 +248,23 @@ public class CommentResource {
 
 	}
 
+	/**
+	 * A private method that returns the URI to the comment specified
+	 * @param uriInfo Uri info object that capsulates the current path of the resource
+	 * @param comment Comment that requires a URI to be retrieved for
+	 * @return URI for the comment
+	 */
 	private URI getUriToComment(UriInfo uriInfo, Comment comment) {
 		URI locationURI = uriInfo.getAbsolutePathBuilder().path(String.valueOf(comment.getId())).build();
 		return locationURI;
 	}
 
+	/**
+	 * A private method that returns the URI to the reply specified.
+	 * @param uriInfo Uri info object that capsulates the current path of the resource
+	 * @param comment Comment that requires a URI to be retrieved for
+	 * @return URI for the comment
+	 */
 	private URI getUriToReply(UriInfo uriInfo, Comment reply) {
 		String absolutePath = uriInfo.getAbsolutePath().toString();
 		String pathToComments = absolutePath.substring(0, absolutePath.lastIndexOf('/'));

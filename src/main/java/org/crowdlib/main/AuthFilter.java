@@ -35,15 +35,15 @@ import org.glassfish.jersey.internal.util.Base64;
 public class AuthFilter implements ContainerRequestFilter {
 
 	private UserDao userDao;
-	
+
 	public AuthFilter() {
 		this.userDao = new UserDaoImpl();
 	}
 
-	// Exception thrown if user is unauthorized.
-	private static final WebApplicationException UNAUHTORISED = new WebApplicationException(
-			Response.status(Status.UNAUTHORIZED).header(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"realm\"")
-					.entity("Page requires login.").build());
+	private void sendUnAuthorised(ContainerRequestContext requestContext) {
+		requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+				.header(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"realm\"").entity("Page requires login.").build());
+	}
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -51,7 +51,7 @@ public class AuthFilter implements ContainerRequestFilter {
 		// Get the authentication passed in HTTP headers parameters
 		String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 		if (authHeader == null) {
-			throw UNAUHTORISED;
+			sendUnAuthorised(requestContext);
 		}
 
 		authHeader = authHeader.replaceFirst("[Bb]asic ", "");
@@ -60,7 +60,7 @@ public class AuthFilter implements ContainerRequestFilter {
 		User user = InMemoryUserCollection.getUser(userCreds.split(":")[0]);
 
 		if (user == null)
-			throw UNAUHTORISED;
+			sendUnAuthorised(requestContext);
 
 		final String credential = user.getUsername() + ":" + user.getPassword();
 		if (userCreds.equals(credential)) {
@@ -69,7 +69,7 @@ public class AuthFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		throw UNAUHTORISED;
+		sendUnAuthorised(requestContext);
 	}
 
 	/**

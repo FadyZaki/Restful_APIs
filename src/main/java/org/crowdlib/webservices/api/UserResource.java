@@ -28,6 +28,11 @@ import org.crowdlib.model.CommentDaoImpl;
 import org.crowdlib.model.UserDao;
 import org.crowdlib.model.UserDaoImpl;
 
+/**
+ * 
+ * @author Fz20
+ *This Class represents the User web service providing all services related to users
+ */
 @Path("/users")
 public class UserResource {
 
@@ -47,6 +52,10 @@ public class UserResource {
 		this.securityContext = securityContext;
 	}
 
+	/**
+	 * Get The current logged in user
+	 * @return current logged in user
+	 */
 	@GET
 	@Path("/self")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -60,6 +69,10 @@ public class UserResource {
 		return currentUser;
 	}
 
+	/**
+	 * Retrieves a list of the user's favourite comments
+	 * @return list of user's favourite comments
+	 */
 	@GET
 	@Path("/self/favourites")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -71,6 +84,11 @@ public class UserResource {
 		return userDao.getUserFavouriteComments(currentUser);
 	}
 
+	/**
+	 * Adds a comment to the list of user favourite comments
+	 * @param commentId the id of the comment to be added to the list of favourites
+	 * @return Comment added to the list of favourites
+	 */
 	@PUT
 	@Path("/self/favourites/{commentId}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -90,6 +108,10 @@ public class UserResource {
 
 	}
 
+	/**
+	 * Retrives a list of the items that the user is currently following
+	 * @return List of items followed by the user
+	 */
 	@GET
 	@Path("/self/followedItems")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -99,6 +121,11 @@ public class UserResource {
 		return userDao.getUserFollowedItems(currentUser);
 	}
 
+	/**
+	 * Adds an item to the user followed catalogue items.
+	 * @param itemId The id of the item to be added
+	 * @return a Response object containing an entity representing the item
+	 */
 	@PUT
 	@Path("/self/followedItems/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -117,6 +144,10 @@ public class UserResource {
 		}
 	}
 
+	/**
+	 * Retrieves all the user's notifications
+	 * @return a list of the user's notifications
+	 */
 	@GET
 	@Path("/self/notifications")
 	@Produces(MediaType.APPLICATION_JSON)

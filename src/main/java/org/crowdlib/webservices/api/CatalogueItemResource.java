@@ -43,12 +43,21 @@ public class CatalogueItemResource {
 		this.catalogueItemDao = new CatalogueItemDaoImpl();
 	}
 	
+	/**
+	 * Retrieves all the catalogue items currently in memory
+	 * @return a list of catalogue items
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CatalogueItem> getCatalogueItems() {
 		return catalogueItemDao.getAll();
 	}
 
+	/**
+	 * Retrieves a catalogue item with the specified id
+	 * @param itemId Id for the catalogue item
+	 * @return the Catalogue item specified by the id
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{itemId}")
@@ -61,7 +70,13 @@ public class CatalogueItemResource {
 			throw new CustomizedWebApplicationException(Status.NOT_FOUND, e.getMessage());
 		}
 	}
-
+	
+	
+/**
+ * This method just returns an instance of the comment subresource as it redirect you
+ * to the comment resource which handles this path. 
+ * @return a comment subresource instance
+ */
 	@Path("/{itemId}/comments")
 	public CommentResource getCommentResource() {
 		return rc.getResource(CommentResource.class);

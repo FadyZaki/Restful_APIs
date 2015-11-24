@@ -39,7 +39,6 @@ public final class Main {
         rc.packages("org.crowdlib.webservices.api");
         rc.packages("org.crowdlib.exceptions");
         rc.packages("org.crowdlib.exceptions.mappers");
-        rc.register(MyResource.class);
         rc.register(CommentResource.class);
         rc.register(CatalogueItemResource.class);
         rc.register(RolesAllowedDynamicFeature.class);
