@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.SecurityContext;
@@ -57,6 +58,7 @@ public class CommentResourceTests {
 		InMemoryUserCollection.initializeInMemoryUsers();
 		InMemoryCatalogueItemCollection.initializeInMemoryCatalogueItems();
 		InMemoryCommentCollection.initializeInMemoryComments();
+		when(mockItem.getId()).thenReturn(11232);
 		InMemoryCatalogueItemCollection.addCatalogueItem(mockItem);
 		when(mockSecurityContext.getUserPrincipal()).thenReturn(mockPrincipal);
 		when(mockPrincipal.getName()).thenReturn("student1");
@@ -150,7 +152,6 @@ public class CommentResourceTests {
 	@Test
 	public void whenCommentisAddedToCatalogueItemItShouldBeAddedToTheListOfNotificationsOfTheItemFollowers() {
 		// given
-		when(mockItem.getId()).thenReturn(11232);
 		ArrayList<Notification> notifications = new ArrayList<Notification>();
 		when(mockUser.getNotifications()).thenReturn(notifications);
 		ArrayList<User> followers = new ArrayList<User>();
