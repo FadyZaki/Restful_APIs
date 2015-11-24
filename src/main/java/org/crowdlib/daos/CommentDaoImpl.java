@@ -46,7 +46,8 @@ public class CommentDaoImpl implements CommentDao {
 
 	@Override
 	public void incrementFavouritesCount(Comment comment) {
-		comment.setFavouritesCount(comment.getFavouritesCount()+1);
+		int favouritesCounts = comment.getFavouritesCount()+1;
+		comment.setFavouritesCount(favouritesCounts);
 	}
 
 	@Override

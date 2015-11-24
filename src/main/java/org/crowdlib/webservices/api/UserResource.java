@@ -43,10 +43,14 @@ public class UserResource {
 		this.commentDao = new CommentDaoImpl();
 	}
 
+	public void setSecurityContext(SecurityContext securityContext) {
+		this.securityContext = securityContext;
+	}
+
 	@GET
 	@Path("/self")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getUser() {
+	public User getCurrentLoggedUser() {
 		User currentUser;
 		try {
 			currentUser = userDao.getUserByUsername(securityContext.getUserPrincipal().getName());
@@ -61,12 +65,9 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Comment> getUserFavouriteComments() {
 		User currentUser;
-		try {
-			currentUser = userDao.getUserByUsername(securityContext.getUserPrincipal().getName());
-			if(currentUser == null) throw new CustomizedWebApplicationException(Status.NOT_FOUND, "User not found");
-		} catch (UserNotFoundException e) {
-			throw new CustomizedWebApplicationException(Status.NOT_FOUND, e.getMessage());
-		}
+
+		currentUser = getCurrentLoggedUser();
+
 		return userDao.getUserFavouriteComments(currentUser);
 	}
 
@@ -76,61 +77,54 @@ public class UserResource {
 	public Comment addCommentToUserFavourites(@PathParam("commentId") int commentId) {
 		User currentUser;
 		try {
-			currentUser = userDao.getUserByUsername(securityContext.getUserPrincipal().getName());
+			currentUser = getCurrentLoggedUser();
 			Comment favouriteComment = commentDao.getById(commentId);
 			if (!userDao.checkIfCommentIsAmongFavourites(currentUser, favouriteComment)) {
 				userDao.addCommentToFavourites(currentUser, favouriteComment);
 				commentDao.incrementFavouritesCount(favouriteComment);
 			}
 			return favouriteComment;
-		} catch (UserNotFoundException | CommentNotFoundException e) {
+		} catch (CommentNotFoundException e) {
 			throw new CustomizedWebApplicationException(Status.NOT_FOUND, e.getMessage());
 		}
 
 	}
-	
+
 	@GET
 	@Path("/self/followedItems")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CatalogueItem> getUserFollowedItems() {
 		User currentUser;
-		try {
-			currentUser = userDao.getUserByUsername(securityContext.getUserPrincipal().getName());
-			return userDao.getUserFollowedItems(currentUser);
-		} catch (UserNotFoundException e) {
-			throw new CustomizedWebApplicationException(Status.NOT_FOUND, e.getMessage());
-		}
+		currentUser = getCurrentLoggedUser();
+		return userDao.getUserFollowedItems(currentUser);
 	}
-	
+
 	@PUT
 	@Path("/self/followedItems/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItemToUserFollowedItems(@PathParam("itemId") int itemId) {
 		User currentUser;
 		try {
-			currentUser = userDao.getUserByUsername(securityContext.getUserPrincipal().getName());
+			currentUser = getCurrentLoggedUser();
 			CatalogueItem item = catalogueItemDao.getById(itemId);
 			if (!userDao.checkIfItemIsAmongFavourites(currentUser, item)) {
 				userDao.addItemToFollowedItems(currentUser, item);
 				catalogueItemDao.addFollower(item, currentUser);
 			}
 			return Response.ok().entity(item).build();
-		} catch (UserNotFoundException | CatalogueItemNotFoundException e) {
+		} catch (CatalogueItemNotFoundException e) {
 			throw new CustomizedWebApplicationException(Status.NOT_FOUND, e.getMessage());
 		}
 	}
-	
+
 	@GET
 	@Path("/self/notifications")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Notification> getUserNotifications() {
 		User currentUser;
-		try {
-			currentUser = userDao.getUserByUsername(securityContext.getUserPrincipal().getName());
-			return userDao.getListOfNotifications(currentUser);
-		} catch (UserNotFoundException e) {
-			throw new CustomizedWebApplicationException(Status.NOT_FOUND, e.getMessage());
-		}
+		currentUser = getCurrentLoggedUser();
+		return userDao.getListOfNotifications(currentUser);
+
 	}
 
 }

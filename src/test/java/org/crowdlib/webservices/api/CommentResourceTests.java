@@ -16,6 +16,7 @@ import org.crowdlib.constants.ExplanatoryMessagesConstants;
 import org.crowdlib.constants.RoleTypeConstants;
 import org.crowdlib.entities.CatalogueItem;
 import org.crowdlib.entities.Comment;
+import org.crowdlib.entities.Notification;
 import org.crowdlib.entities.User;
 import org.crowdlib.exceptions.CustomizedWebApplicationException;
 import org.crowdlib.inmemory.collections.InMemoryCatalogueItemCollection;
@@ -29,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommentResourceTest {
+public class CommentResourceTests {
 
 	@Mock
 	private Comment mockComment;
@@ -56,6 +57,7 @@ public class CommentResourceTest {
 		InMemoryUserCollection.initializeInMemoryUsers();
 		InMemoryCatalogueItemCollection.initializeInMemoryCatalogueItems();
 		InMemoryCommentCollection.initializeInMemoryComments();
+		InMemoryCatalogueItemCollection.addCatalogueItem(mockItem);
 		when(mockSecurityContext.getUserPrincipal()).thenReturn(mockPrincipal);
 		when(mockPrincipal.getName()).thenReturn("student1");
 		this.commentResource.setSecurityContext(mockSecurityContext);
@@ -154,16 +156,16 @@ public class CommentResourceTest {
 	public void whenCommentisAddedToCatalogueItemItShouldBeAddedToTheListOfNotificationsOfTheItemFollowers() {
 		// given
 		when(mockItem.getId()).thenReturn(11232);
-		User follower = new User();
+		ArrayList<Notification> notifications = new ArrayList<Notification>();
+		when(mockUser.getNotifications()).thenReturn(notifications);
 		ArrayList<User> followers = new ArrayList<User>();
-		followers.add(follower);
+		followers.add(mockUser);
 		when(mockItem.getFollowers()).thenReturn(followers);
-		InMemoryCatalogueItemCollection.addCatalogueItem(mockItem);
 		
 		// when
-		int numberOfNotificationsBeforeCommentIsAdded = follower.getNotifications().size();
+		int numberOfNotificationsBeforeCommentIsAdded = mockUser.getNotifications().size();
 		this.commentResource.addCommentToCatalogueItem(mockItem.getId(), "new comment");
-		int numberOfNotificationsAfterCommentIsAdded = follower.getNotifications().size();
+		int numberOfNotificationsAfterCommentIsAdded = mockUser.getNotifications().size();
 
 		// then
 		assertEquals(numberOfNotificationsBeforeCommentIsAdded + 1, numberOfNotificationsAfterCommentIsAdded);

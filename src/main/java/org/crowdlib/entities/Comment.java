@@ -35,6 +35,14 @@ public class Comment {
 	
 	public static int numberOfComments=0;
 
+	public Comment(){
+		super();
+		this.id = ++numberOfComments;
+		this.creationTimestamp = LocalDateTime.now();
+		this.parentComment = null;
+		this.replies = new ArrayList<Comment>();
+		this.favouritesCount = 0;
+	}
 	public Comment(String content, User owner, CatalogueItem catalogueItem) {
 		super();
 		this.id = ++numberOfComments;
