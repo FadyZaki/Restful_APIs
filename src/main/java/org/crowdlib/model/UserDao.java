@@ -1,4 +1,4 @@
-package org.crowdlib.daos;
+package org.crowdlib.model;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface UserDao {
 	
 	public List<CatalogueItem> getUserFollowedItems(User user);
 
-	public boolean checkIfItemIsAmongFavourites(User user, CatalogueItem item);
+	public boolean checkIfItemIsAmongFollowedItems(User user, CatalogueItem item);
 
 	public void addItemToFollowedItems(User user, CatalogueItem item);
 	

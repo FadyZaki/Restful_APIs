@@ -1,4 +1,4 @@
-package org.crowdlib.daos;
+package org.crowdlib.model;
 
 import java.util.List;
 

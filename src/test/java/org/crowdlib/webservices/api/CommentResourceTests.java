@@ -68,11 +68,6 @@ public class CommentResourceTests {
 	}
 
 	@Test
-	public void whenGetCatalogueItemCommentsIsCalledShouldReturnAllCommentsBelongingToThisItem() {
-
-	}
-
-	@Test
 	public void whenGetCommentIsCalledOnCommentAvailableInMemoryItShouldReturnThatComment() {
 		// given:
 		when(mockComment.getId()).thenReturn(111);

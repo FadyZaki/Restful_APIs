@@ -1,4 +1,4 @@
-package org.crowdlib.daos;
+package org.crowdlib.model;
 
 import java.util.Iterator;
 import java.util.List;
@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public boolean checkIfItemIsAmongFavourites(User user, CatalogueItem item) {
+	public boolean checkIfItemIsAmongFollowedItems(User user, CatalogueItem item) {
 		return user.getFollowedItems().contains(item);	
 	}
 	

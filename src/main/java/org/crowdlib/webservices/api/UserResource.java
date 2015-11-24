@@ -13,12 +13,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
-import org.crowdlib.daos.CatalogueItemDao;
-import org.crowdlib.daos.CatalogueItemDaoImpl;
-import org.crowdlib.daos.CommentDao;
-import org.crowdlib.daos.CommentDaoImpl;
-import org.crowdlib.daos.UserDao;
-import org.crowdlib.daos.UserDaoImpl;
 import org.crowdlib.entities.CatalogueItem;
 import org.crowdlib.entities.Comment;
 import org.crowdlib.entities.Notification;
@@ -27,6 +21,12 @@ import org.crowdlib.exceptions.CatalogueItemNotFoundException;
 import org.crowdlib.exceptions.CommentNotFoundException;
 import org.crowdlib.exceptions.CustomizedWebApplicationException;
 import org.crowdlib.exceptions.UserNotFoundException;
+import org.crowdlib.model.CatalogueItemDao;
+import org.crowdlib.model.CatalogueItemDaoImpl;
+import org.crowdlib.model.CommentDao;
+import org.crowdlib.model.CommentDaoImpl;
+import org.crowdlib.model.UserDao;
+import org.crowdlib.model.UserDaoImpl;
 
 @Path("/users")
 public class UserResource {
@@ -107,7 +107,7 @@ public class UserResource {
 		try {
 			currentUser = getCurrentLoggedUser();
 			CatalogueItem item = catalogueItemDao.getById(itemId);
-			if (!userDao.checkIfItemIsAmongFavourites(currentUser, item)) {
+			if (!userDao.checkIfItemIsAmongFollowedItems(currentUser, item)) {
 				userDao.addItemToFollowedItems(currentUser, item);
 				catalogueItemDao.addFollower(item, currentUser);
 			}

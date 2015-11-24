@@ -13,12 +13,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
-import org.crowdlib.daos.UserDao;
-import org.crowdlib.daos.UserDaoImpl;
 import org.crowdlib.entities.User;
 import org.crowdlib.exceptions.CustomizedWebApplicationException;
 import org.crowdlib.exceptions.UserNotFoundException;
 import org.crowdlib.inmemory.collections.InMemoryUserCollection;
+import org.crowdlib.model.UserDao;
+import org.crowdlib.model.UserDaoImpl;
 import org.glassfish.jersey.internal.util.Base64;
 
 /**
